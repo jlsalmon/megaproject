@@ -1,0 +1,39 @@
+{% extends "base/base_with_nav.html" %}
+{% block content %}
+  <h1>Create Project</h1>
+
+  <form action="" method="post" name="create-project">
+    {{ form.hidden_tag() }}
+
+    <input type="text" class="input-block-level"
+           placeholder="Project Name"
+           id="{{ form.project_name.id }}"
+           name="{{ form.project_name.id }}">
+
+    <input type="text" class="input-block-level"
+           placeholder="Start Date"
+           id="{{ form.start_date.id }}"
+           name="{{ form.start_date.id }}">
+
+    <input type="text" class="input-block-level"
+           placeholder="End Date"
+           id="{{ form.end_date.id }}"
+           name="{{ form.end_date.id }}">
+
+    <input type="text" class="input-block-level"
+           placeholder="Info"
+           id="{{ form.info.id }}"
+           name="{{ form.info.id }}">
+
+    <input type="text" class="input-block-level"
+           placeholder="Team"
+           id="{{ form.team.id }}"
+           name="{{ form.team.id }}">
+
+    {% for error in form.errors %}
+      <span class="help-inline">{{ error }}</span>
+    {% endfor %}
+
+    <button class="btn btn-large btn-primary" type="submit">Create</button>
+  </form>
+{% endblock %}
