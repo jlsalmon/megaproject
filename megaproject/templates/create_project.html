@@ -1,39 +1,37 @@
 {% extends "base/base_with_nav.html" %}
+{% from "macros.html" import alert, field, input, date %}
+
+{% block css %}
+  <link rel="stylesheet" href="../static/css/datepicker.css" media="screen"/>
+{% endblock %}
+
 {% block content %}
-  <h1>Create Project</h1>
 
-  <form action="" method="post" name="create-project">
-    {{ form.hidden_tag() }}
+  <div class="span8">
+    <form class="form-horizontal" action="" method="post" name="create-project">
+      <fieldset>
+        <legend>Create Project</legend>
 
-    <input type="text" class="input-block-level"
-           placeholder="Project Name"
-           id="{{ form.project_name.id }}"
-           name="{{ form.project_name.id }}">
+        {{ field(form.name) }}
+        {{ field(form.info) }}
+        {{ date(form.start_date) }}
+        {{ date(form.end_date) }}
+        {{ field(form.team) }}
 
-    <input type="text" class="input-block-level"
-           placeholder="Start Date"
-           id="{{ form.start_date.id }}"
-           name="{{ form.start_date.id }}">
+        <div class="form-actions">
+          {{ form.hidden_tag() }}
+          <button type="submit" class="btn btn-primary">Submit</button>
+          <a href="#" class="btn">Cancel</a>
+        </div>
+      </fieldset>
+    </form>
+  </div>
 
-    <input type="text" class="input-block-level"
-           placeholder="End Date"
-           id="{{ form.end_date.id }}"
-           name="{{ form.end_date.id }}">
+{% endblock %}
 
-    <input type="text" class="input-block-level"
-           placeholder="Info"
-           id="{{ form.info.id }}"
-           name="{{ form.info.id }}">
-
-    <input type="text" class="input-block-level"
-           placeholder="Team"
-           id="{{ form.team.id }}"
-           name="{{ form.team.id }}">
-
-    {% for error in form.errors %}
-      <span class="help-inline">{{ error }}</span>
-    {% endfor %}
-
-    <button class="btn btn-large btn-primary" type="submit">Create</button>
-  </form>
+{% block scripts %}
+  <script type="text/javascript" src="../static/js/bootstrap-datepicker.js"></script>
+  <script type="text/javascript">
+    $('.datepicker').datepicker()
+  </script>
 {% endblock %}

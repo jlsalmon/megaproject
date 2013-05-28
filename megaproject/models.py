@@ -1,16 +1,55 @@
-from megaproject import db
+from megaproject import db, Base
 
 ROLE_USER = 0
 ROLE_ADMIN = 1
 
 
+class Project(db.Model):
+    __tablename__ = 'project'
+    __table_args__ = {'extend_existing':True}
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(256), index=True)
+    start_date = db.Column(db.Date)
+    end_date = db.Column(db.Date)
+    info = db.Column(db.String(256))
+    owner_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+
+    tasks = db.relationship('Task')
+
+    def __repr__(self):
+        return '<Project %d %s owner %s>' % (self.id, self.name, self.owner_id)
+
+
+class Task(db.Model):
+    __tablename__ = 'task'
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(256), index=True)
+    start_date = db.Column(db.Date)
+    end_date = db.Column(db.Date)
+    info = db.Column(db.String(256))
+    project_id = db.Column(db.Integer, db.ForeignKey('project.id'))
+    owner_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+    parent_task = db.Column(db.Integer, db.ForeignKey('task.id'))
+
+    def __repr__(self):
+        return '<Task %r>' % self.name
+
+
+association_table = db.Table('UserTask', Base.metadata,
+                             db.Column('user_id', db.Integer, db.ForeignKey('user.id')),
+                             db.Column('task_id', db.Integer, db.ForeignKey('task.id'))
+)
+
+
 class User(db.Model):
+    __tablename__ = 'user'
     id = db.Column(db.Integer, primary_key=True)
     nickname = db.Column(db.String(64), index=True, unique=True)
     email = db.Column(db.String(120), index=True, unique=True)
     role = db.Column(db.SmallInteger, default=ROLE_USER)
-    projects = db.relationship('Project', backref='owner', lazy='dynamic')
-    #tasks = db.relationship('Task', backref='workers', lazy='dynamic')
+    # children = db.relationship("Task",
+    #                            secondary=association_table,
+    #                            backref="users")
 
     def is_authenticated(self):
         return True
@@ -38,17 +77,3 @@ class User(db.Model):
 
     def __repr__(self):
         return '<User %r>' % self.nickname
-
-
-class Project(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String(256), index=True)
-    start_date = db.Column(db.Date)
-    end_date = db.Column(db.Date)
-    progress = db.Column(db.Integer)
-    owner_id = db.Column(db.Integer, db.ForeignKey('user.id'))
-    # members = db.relationship('Members', backref='members', lazy='dynamic')
-    # subtasks = db.relationship('Task', backref='subtasks', lazy='dynamic')
-
-# class Task(db.Model):
-#     pass

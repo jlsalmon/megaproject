@@ -1,1 +1,144 @@
-{% extends "base/base_with_nav.html" %}
+{% extends "base/base_with_nav_responsive.html" %}
+{% from "macros.html" import alert, field, input, date %}
+
+{% block css %}
+  <style type="text/css">
+    body {
+      padding-bottom: 60px;
+    }
+
+      /* Custom container */
+    .container {
+      margin: 0 auto;
+      max-width: 1000px;
+    }
+
+    .container > hr {
+      margin: 60px 0;
+    }
+
+      /* Customize the navbar links to be fill the entire space of the .navbar */
+    .navbar .navbar-inner {
+      padding: 0;
+    }
+
+    .navbar .navbar-justified .nav {
+      margin: 0;
+      display: table;
+      width: 100%;
+    }
+
+    .navbar .navbar-justified .nav li {
+      display: table-cell;
+      width: 1%;
+      float: none;
+    }
+
+    .navbar .navbar-justified .nav li a {
+      font-weight: bold;
+      text-align: center;
+      border-left: 1px solid rgba(255, 255, 255, .75);
+      border-right: 1px solid rgba(0, 0, 0, .1);
+    }
+
+    .navbar .navbar-justified .nav li:first-child a {
+      border-left: 0;
+      border-radius: 3px 0 0 3px;
+    }
+
+    .navbar .navbar-justified .nav li:last-child a {
+      border-right: 0;
+      border-radius: 0 3px 3px 0;
+    }
+  </style>
+{% endblock %}
+
+{% block content %}
+
+  <div class="navbar tabbable">
+    <div class="navbar-inner navbar-justified">
+
+        <!-- .btn-navbar is used as the toggle for collapsed navbar content -->
+        <a class="btn btn-navbar" data-toggle="collapse" data-target="#justified-nav-collapse">
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </a>
+
+        <div id="justified-nav-collapse" class="nav-collapse collapse">
+          <ul id="justified-nav" class="nav">
+            <li class="active"><a href="#overview" data-toggle="tab">Overview</a></li>
+            <li><a href="#todo" data-toggle="tab">To-Do</a></li>
+            <li><a href="#team" data-toggle="tab">Team Members</a></li>
+            <li><a href="#settings" data-toggle="tab">Settings</a></li>
+          </ul>
+        </div>
+    </div>
+  </div>
+  <!-- /.navbar -->
+
+  <div class="row-fluid">
+    <div class="span12">
+      <div class="tab-content">
+        <div class="tab-pane active" id="overview">Loading...</div>
+        <div class="tab-pane" id="todo">Loading...</div>
+        <div class="tab-pane" id="team">Loading...</div>
+        <div class="tab-pane" id="settings">Loading...</div>
+      </div>
+    </div>
+  </div>
+
+  {#  <div class="span8">#}
+  {#    <form class="form-horizontal" action="" method="post" name="create-task">#}
+  {#      <fieldset>#}
+  {#        <legend>Create Task</legend>#}
+  {##}
+  {#        {{ field(form.name) }}#}
+  {#        {{ field(form.info) }}#}
+  {#        {{ date(form.start_date) }}#}
+  {#        {{ date(form.end_date) }}#}
+  {#        {{ field(form.team) }}#}
+  {##}
+  {#        <div class="form-actions">#}
+  {#          {{ form.hidden_tag() }}#}
+  {#          <button type="submit" class="btn btn-primary">Submit</button>#}
+  {#          <a href="#" class="btn">Cancel</a>#}
+  {#        </div>#}
+  {#      </fieldset>#}
+  {#    </form>#}
+  {#  </div>#}
+
+{% endblock %}
+
+{% block content_side %}
+  <div class="thumbnail">
+    <div class="caption">
+      <h3>Thumbnail label</h3>
+
+      <p>Cras justo odio, dapibus ac facilisis in, egestas eget quam. Donec id elit non mi porta gravida at eget metus.
+        Nullam id dolor id nibh ultricies vehicula ut id elit.</p>
+
+      <p><a href="#" class="btn btn-primary">Action</a> <a href="#" class="btn">Action</a></p>
+    </div>
+  </div>
+{% endblock %}
+
+{% block scripts %}
+  <script type="text/javascript">
+    $(function () {
+      var baseURL = '/';
+      //load content for first tab and initialize
+      $('#overview').load(baseURL + 'overview', function () {
+        $('#justified-nav').tab(); //initialize tabs
+      });
+      $('#justified-nav').bind('show', function (e) {
+        var pattern = /#.+/gi //use regex to get anchor(==selector)
+        var contentID = e.target.toString().match(pattern)[0]; //get anchor
+        //load content for selected tab
+        $(contentID).load(baseURL + contentID.replace('#', ''), function () {
+          $('#justified-nav').tab(); //reinitialize tabs
+        });
+      });
+    });
+  </script>
+{% endblock %}

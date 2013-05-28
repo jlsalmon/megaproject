@@ -1,17 +1,23 @@
-from flask import render_template, flash, redirect, session, url_for, g, request
+from flask import render_template, flash, redirect, session, url_for, g, request, jsonify
 from flask.ext.login import login_user, current_user, login_required, logout_user
 from megaproject import app, lm, oid, db
-from forms import LoginForm, CreateProjectForm
+from forms import LoginForm, CreateProjectForm, CreateTaskForm
 
-from models import User, ROLE_USER
+from models import User, ROLE_USER, Project
 
 
 @app.route('/')
 @app.route('/index')
 @login_required
 def index():
+    flash("test flash")
     user = g.user
-    return render_template('index.html', title='Index', user=user)
+    projects = Project.query.all()
+    meta = db.metadata.tables.keys()
+
+    form = CreateTaskForm()
+
+    return render_template('index.html', title='Index', user=user, projects=projects, meta=meta, form=form)
 
 
 @lm.user_loader
@@ -57,6 +63,7 @@ def after_login(resp):
         remember_me = session['remember_me']
         session.pop('remember_me', None)
     login_user(user, remember=remember_me)
+
     return redirect(request.args.get('next') or url_for('index'))
 
 
@@ -73,8 +80,57 @@ def create_project():
     form = CreateProjectForm()
 
     if form.validate_on_submit():
-        return 'ok'
+        for project in Project.query.all():
+            if project.name == form.name.data:
+                flash('project already exists')
+                return redirect(url_for('create_project'))
+        app.logger.debug('form.validate_on_submit')
+        project = Project(name=form.name.data,
+                          start_date=form.start_date.data,
+                          end_date=form.end_date.data,
+                          info=form.info.data)
+        print 'team: ' + form.team.data
+        db.session.add(project)
+        db.session.commit()
+        flash('created project %s' % form.name.data)
+        return redirect(url_for('index'))
 
     return render_template('create_project.html', title='Create Project', user=user, form=form)
 
+
+@app.route('/create-task', methods=['GET', 'POST'])
+@login_required
+def create_task():
+    user = g.user
+
+
+@app.route('/overview', methods=['GET', 'POST'])
+@login_required
+def overview():
+    return render_template('views/selectable.html')
+
+
+@app.route('/todo', methods=['GET', 'POST'])
+@login_required
+def todo():
+    return "todo"
+
+
+@app.route('/team', methods=['GET', 'POST'])
+@login_required
+def team():
+    return "team"
+
+
+@app.route('/settings', methods=['GET', 'POST'])
+@login_required
+def settings():
+    return "settings"
+
+
+@app.route('/typeahead', methods=['GET', 'POST'])
+@login_required
+def typeahead():
+    response = jsonify(options=['red', 'blue', 'green', 'yellow'])
+    return response
 

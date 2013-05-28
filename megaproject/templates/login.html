@@ -9,7 +9,7 @@
     }
 
     .form-signin {
-      max-width: 400px;
+      max-width: 700px;
       padding: 19px 29px 29px;
       margin: 0 auto 20px;
       background-color: #fff;
@@ -39,40 +39,43 @@
 {% endblock %}
 
 {% block content %}
+
+
   <form class="form-signin" action="" method="post" name="login">
     <h2 class="form-signin-heading">Please sign in</h2>
     {{ form.hidden_tag() }}
 
-    {% if form.errors.openid %}
-      <div class="control-group error">
-        <div class="controls">
-          <input type="text" class="input-block-level"
-                 placeholder="OpenID"
-                 id="{{ form.openid.id }}"
-                 name="{{ form.openid.name }}">
-          {% for error in form.errors.openid %}
-            <span class="help-inline">{{ error }}</span>
-          {% endfor %}
-        </div>
+    {% include "flashes.html" %}
+
+    <div class="help-block">Click on your OpenID provider below:</div>
+    <div class="control-group">
+      {% for pr in providers %}
+        <a href="javascript:set_openid('{{ pr.url }}', '{{ pr.name }}');"><img
+           src="/static/img/{{ pr.name.lower() }}.png" class="img-polaroid" style="margin:2px;"/></a>
+      {% endfor %}
+    </div>
+    <div class="control-group{% if form.errors.openid %} error{% endif %}">
+      <label class="control-label" for="openid">Or enter your OpenID here:</label>
+
+      <div class="controls">
+        {{ form.openid(size = 80, class = "span4") }}
+        {% for error in form.errors.openid %}
+          <span class="help-inline">[{{ error }}]</span><br>
+        {% endfor %}
       </div>
-    {% else %}
-      <input type="text" class="input-block-level"
-             placeholder="OpenID"
-             id="{{ form.openid.id }}"
-             name="{{ form.openid.name }}">
-    {% endif %}
-
-    {% for pr in providers %}
-      <a href="javascript:set_openid('{{ pr.url }}', '{{ pr.name }}');">{{ pr.name }}</a> |
-    {% endfor %}
-
-    <label class="checkbox">
-      <input type="checkbox" value="remember-me"
-             id="{{ form.remember_me.id }}"
-             name="{{ form.remember_me.name }}">
-      Remember me
-    </label>
-    <button class="btn btn-large btn-primary" type="submit">Sign in</button>
+    </div>
+    <div class="control-group">
+      <div class="controls">
+        <label class="checkbox" for="remember_me">
+          {{ form.remember_me }} Remember Me
+        </label>
+      </div>
+    </div>
+    <div class="control-group">
+      <div class="controls">
+        <input class="btn btn-primary" type="submit" value="Sign In">
+      </div>
+    </div>
   </form>
 
   <script type="text/javascript">
@@ -85,6 +88,9 @@
       }
       form = document.forms['login'];
       form.elements['openid'].value = openid
+      form.submit()
     }
   </script>
 {% endblock %}
+
+

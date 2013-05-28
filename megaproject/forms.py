@@ -1,4 +1,4 @@
-from flask.ext.wtf import Form, TextField, BooleanField
+from flask.ext.wtf import Form, TextField, BooleanField, DateField
 from flask.ext.wtf import Required
 
 
@@ -7,9 +7,15 @@ class LoginForm(Form):
     remember_me = BooleanField('remember_me', default=False)
 
 
-class CreateProjectForm(Form):
-    project_name = TextField('project_name', validators=[Required()])
-    start_date = TextField('start_date', validators=[Required()])
-    end_date = TextField('end_date', validators=[Required()])
-    info = TextField('info')
-    team = TextField('team', validators=[Required()])
+class CreateTaskForm(Form):
+    name = TextField('Task Name', validators=[Required(), ])
+    info = TextField('Info', description='Some helpful text')
+    start_date = DateField('Start Date', validators=[Required()])
+    end_date = DateField('End Date', validators=[Required()])
+    team = TextField('Team', validators=[Required()])
+
+
+class CreateProjectForm(CreateTaskForm):
+    name = TextField('Project Name', validators=[Required()])
+
+
