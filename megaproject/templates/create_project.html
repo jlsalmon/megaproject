@@ -1,4 +1,4 @@
-{% extends "base/base_with_nav.html" %}
+{% extends "base/base_with_nav_responsive.html" %}
 {% from "macros.html" import alert, field, input, date %}
 
 {% block css %}
@@ -30,7 +30,6 @@
 {% endblock %}
 
 {% block scripts %}
-  <script type="text/javascript" src="../static/js/bootstrap-datepicker.js"></script>
   <script type="text/javascript">
     $('.datepicker').datepicker()
   </script>
