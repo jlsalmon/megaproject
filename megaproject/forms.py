@@ -8,10 +8,10 @@ class LoginForm(Form):
 
 
 class CreateTaskForm(Form):
-    name = TextField('Task Name', validators=[Required(), ])
-    info = TextField('Info', description='Some helpful text')
-    start_date = DateField('Start Date', validators=[Required()])
-    end_date = DateField('End Date', validators=[Required()])
+    name = TextField('Task Name', validators=[Required()])
+    info = TextField('Info')
+    start_date = DateField('Start Date', validators=[Required()], format='%d-%m-%Y')
+    end_date = DateField('End Date', validators=[Required()], format='%d-%m-%Y')
     team = TextField('Team', validators=[Required()])
 
 
