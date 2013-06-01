@@ -1,0 +1,17 @@
+{% from "macros.html" import alert, field, input, date %}
+
+<form class="form-vertical" action="/create-task" method="post" id="create-task">
+  <fieldset>
+    <h3>Create Task</h3>
+
+    {{ field(form.name, hide_label=True, placeholder=True) }}
+    {{ field(form.info, hide_label=True, placeholder=True) }}
+    {{ date(form.start_date, hide_label=True, placeholder=True) }}
+    {{ date(form.end_date, hide_label=True, placeholder=True) }}
+    {{ field(form.team, input_classes='typeahead', hide_label=True, placeholder=True, autocomplete='off') }}
+
+    {{ form.hidden_tag() }}
+    <button type="submit" class="btn btn-primary">Submit</button>
+    <a href="#" class="btn">Cancel</a>
+  </fieldset>
+</form>

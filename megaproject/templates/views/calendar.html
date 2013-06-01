@@ -14,8 +14,60 @@
         center: 'title',
         right: 'month,agendaWeek,agendaDay'
       },
+
+      eventSources: [
+        {
+          url: '/events',
+          type: 'POST',
+          data: {
+            custom_param1: 'something',
+            custom_param2: 'somethingelse'
+          },
+          error: function (e) {
+            alert('there was an error while fetching events!');
+            console.log(e)
+          },
+          success: function (data) {
+            console.log(data)
+          }
+          //className: 'popover'
+          //color: '#eee',     // a non-ajax option
+          //textColor: 'black' // a non-ajax option
+        },
+        // any other sources...
+
+        'https://www.google.com/calendar/feeds/mccrustin%40gmail.com/public/basic'
+      ],
+
+      eventClick: function (task) {
+        // opens events in a popup window
+        {#        window.open(event.url, 'gcalevent', 'width=700,height=600');#}
+
+        $.ajax({
+          type: "POST",
+          url: '/task-overview',
+          data: task,
+          success: function (data) {
+            alert('lol')
+            $('#task-overview').html(data);
+
+            $('.popover').popover({
+              html: true,
+              trigger: 'hover',
+              content: function () {
+                return $('#popover_content_wrapper').html();
+              }
+
+            });
+          }
+        });
+        return false;
+      },
+
+      editable: true,
       selectable: true,
       selectHelper: true,
+
       select: function (start, end, allDay) {
         var title = prompt('Event Title:');
         if (title) {
@@ -31,13 +83,6 @@
         }
         calendar.fullCalendar('unselect');
       },
-      editable: true,
-
-      eventClick: function (event) {
-        // opens events in a popup window
-        window.open(event.url, 'gcalevent', 'width=700,height=600');
-        return false;
-      },
 
       loading: function (bool) {
         if (bool) {
@@ -45,34 +90,7 @@
         } else {
           $('#loading').hide();
         }
-      },
-
-
-      eventSources: [
-
-        // your event source
-        {
-          url: '/events',
-          type: 'POST',
-          data: {
-            custom_param1: 'something',
-            custom_param2: 'somethingelse'
-          },
-          error: function () {
-            alert('there was an error while fetching events!');
-          },
-          success: function (data) {
-            console.log(data)
-          }
-          //color: '#eee',     // a non-ajax option
-          //textColor: 'black' // a non-ajax option
-        },
-
-        // any other sources...
-        // 'http://www.google.com/calendar/feeds/usa__en%40holiday.calendar.google.com/public/basic'
-
-      ]
-
+      }
     });
 
   });

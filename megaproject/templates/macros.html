@@ -1,98 +1,108 @@
 {% macro alert(content, type=None, alert_header=None, close_button=True) -%}
-    {# type can be success, error (or danger), info. Defaults to a warning style. #}
-    <div class="alert
+  {# type can be success, error (or danger), info. Defaults to a warning style. #}
+  <div class="alert
                 {%- if alert_header %} alert-block{% endif -%}
                 {%- if type %} alert-{{ type }}{% endif -%}
                 {%- if close_button %} fade in{% endif %}">
-        {% if close_button -%}
-            <a class="close" data-dismiss="alert">&times;</a>
-        {%- endif %}
-        {% if alert_header -%}
-            <h4 class="alert-heading">{{ alert_header|safe }}</h4>
-        {%- endif %}
+    {% if close_button -%}
+      <a class="close" data-dismiss="alert">&times;</a>
+    {%- endif %}
+    {% if alert_header -%}
+      <h4 class="alert-heading">{{ alert_header|safe }}</h4>
+    {%- endif %}
 
-        {{ content|safe }}
+    {{ content|safe }}
 
-    </div>
+  </div>
 {%- endmacro %}
 
 {% macro label(content, type='warning') -%}
-    <span class="label label-{{ type }}">{{ content|safe }}</span>
+  <span class="label label-{{ type }}">{{ content|safe }}</span>
 {%- endmacro %}
 
 {% macro non_field_errors(form) %}
-    {% if form.non_field_errors %}
-        {% for error in form.non_field_errors() %}
-            {{ alert(content=error, type='error', close_button=False) }}
-        {% endfor %}
-    {% endif %}
+  {% if form.non_field_errors %}
+    {% for error in form.non_field_errors() %}
+      {{ alert(content=error, type='error', close_button=False) }}
+    {% endfor %}
+  {% endif %}
 {% endmacro %}
 
 {% macro label(field) -%}
-    <label class="control-label"{% if field.auto_id %} for="{{ field.auto_id|safe }}"{% endif %}>{{ field.label|safe }}</label>
+  <label class="control-label"{% if field.auto_id %}
+         for="{{ field.auto_id|safe }}"{% endif %}>{{ field.label|safe }}</label>
 {%- endmacro %}
 
-{% macro input(field, prepend_content=None, append_content=None) -%}
-    {# Helper macro for rendering the input itself #}
+{% macro input(field, input_classes=None, prepend_content=None, append_content=None, placeholder=None, autocomplete='on') -%}
+  {# Helper macro for rendering the input itself #}
 
-    {% if prepend_content %}
+  {% if prepend_content %}
     <div class="input-prepend">
-    {% elif append_content %}
+  {% elif append_content %}
     <div class="input-append">
-    {% endif %}
-    {%- if prepend_content -%}
-        <span class="add-on">{{ prepend_content }}</span>
-    {%- endif -%}
+  {% endif %}
+{%- if prepend_content -%}
+  <span class="add-on">{{ prepend_content }}</span>
+{%- endif -%}
 
+{% if placeholder %}
+  {{ field(placeholder=placeholder, class=input_classes, autocomplete=autocomplete) }}
+{% else %}
+  {{ field|safe }}
+{% endif %}
+
+{%- if append_content -%}
+  <span class="add-on">{{ append_content }}</span>
+{%- endif -%}
+
+{% if field.errors %}
+  <span class="help-inline">{{ field.errors|join(' ')|safe }}</span>
+{% endif %}
+
+{% if append_content or prepend_content %}
+  </div>
+{% endif %}
+{%- endmacro %}
+
+{% macro field(field, classes=None, input_classes=None, prepend_content=None, append_content=None, hide_label=False, inline=False, placeholder=False, autocomplete='on') -%}
+  {% if field.is_hidden %}
     {{ field|safe }}
+  {% else %}
+    <div class="control-group{% if field.errors %} error{% endif -%}{%- if classes %} {{ classes }}{% endif %}">
+      {% if not hide_label %}
+        {{ label(field) }}
+      {% endif %}
+      <div class="controls">
 
-    {%- if append_content -%}
-        <span class="add-on">{{ append_content }}</span>
-    {%- endif -%}
+        {{ input(field, input_classes, prepend_content, append_content, placeholder, autocomplete) }}
 
-    {% if field.errors %}
-        <span class="help-inline">{{ field.errors|join(' ')|safe }}</span>
-    {% endif %}
-
-    {% if append_content or prepend_content %}
+        {% if field.description %}
+          <p class="help-block">{{ field.description|safe }}</p>
+        {% endif %}
+      </div>
     </div>
-    {% endif %}
+  {% endif %}
 {%- endmacro %}
 
-{% macro field(field, classes=None, prepend_content=None, append_content=None, hide_label=False, inline=False) -%}
-    {% if field.is_hidden %}
-        {{ field|safe }}
-    {% else %}
-        <div class="control-group{% if field.errors %} error{% endif -%}{%- if classes %} {{ classes }}{% endif %}">
-            {% if not hide_label %}
-                {{ label(field) }}
-            {% endif %}
-            <div class="controls">
-
-                {{ input(field, prepend_content, append_content) }}
-
-                {% if field.description %}
-                    <p class="help-block">{{ field.description|safe }}</p>
-                {% endif %}
-            </div>
-        </div>
-    {% endif %}
-{%- endmacro %}
-
-{% macro date(field) %}
+{% macro date(field, hide_label=False, placeholder=False) %}
   <div class="control-group{% if field.errors %} error{% endif -%}{%- if classes %} {{ classes }}{% endif %}">
-    {{ label(field) }}
+    {% if not hide_label %}
+      {{ label(field) }}
+    {% endif %}
     <div class="controls">
-      <div class="input-append date datepicker"
-           data-date="12-02-2012"
-           data-date-format="dd-mm-yyyy">
-        <input class="span" size="16" type="date" value="12-02-2012" id="{{ field.id }}"
-               name="{{ field.id }}">
+      <div class="input-append date datepicker" data-date-format="dd-mm-yyyy">
+        {% if placeholder %}
+          {{ field(placeholder=field.name) }}
+        {% else %}
+          {{ field }}
+        {% endif %}
         <span class="add-on"><i class="icon-th"></i></span>
       </div>
+
       {% if field.errors %}
         <span class="help-inline">{{ field.errors|join(' ')|safe }}</span>
       {% endif %}
     </div>
   </div>
+
 {% endmacro %}

@@ -1,9 +1,10 @@
-from flask import render_template, flash, redirect, session, url_for, g, request, jsonify
+from datetime import datetime
+from flask import render_template, flash, redirect, session, url_for, g, request, jsonify, json
 from flask.ext.login import login_user, current_user, login_required, logout_user
 from megaproject import app, lm, oid, db
 from forms import LoginForm, CreateProjectForm, CreateTaskForm
 
-from models import User, ROLE_USER, Project
+from models import User, ROLE_USER, Project, Task
 
 
 @app.route('/')
@@ -98,16 +99,57 @@ def create_project():
     return render_template('create_project.html', title='Create Project', user=user, form=form)
 
 
-@app.route('/create-task', methods=['GET', 'POST'])
+@app.route('/create-task', methods=['POST'])
 @login_required
 def create_task():
     user = g.user
+    form = CreateTaskForm()
+
+    print 'form:', request.form
+
+    if form.validate_on_submit():
+        print 'ok'
+        # Check the task doesn't already exist
+        task = Task(name=form.name.data,
+                    start_date=form.start_date.data,
+                    end_date=form.end_date.data,
+                    info=form.info.data)
+        db.session.add(task)
+        db.session.commit()
+        flash('created task %s' % form.name.data)
+        return redirect(url_for('index'))
+
+    return render_template('index.html', title='Index', user=user, form=form)
 
 
 @app.route('/overview', methods=['GET', 'POST'])
 @login_required
 def overview():
-    return render_template('views/selectable.html')
+    return render_template('views/calendar.html')
+
+
+@app.route('/events', methods=['GET', 'POST'])
+@login_required
+def events():
+    event1 = {'title': 'Task 1', 'start': '2013-05-05 12:30:00',
+              'end': '%s' % datetime.now().strftime('%Y-%m-%d %H:%M:%S'), 'color': '#ddd'}
+    event2 = {'title': 'Task 2', 'start': '2013-05-06 12:30:00',
+              'end': '%s' % datetime.now().strftime('%Y-%m-%d %H:%M:%S'), 'color': '#eee'}
+
+    events = [event1, event2]
+
+    for event in Task.query.all():
+        ev = event.__dict__
+        del ev['_sa_instance_state']
+        ev['title'] = ev['name']
+        ev['start'] = ev['start_date'].strftime('%Y-%m-%d')
+        del ev['start_date']
+        ev['end'] = ev['end_date'].strftime('%Y-%m-%d')
+        del ev['end_date']
+        events.append(ev)
+        print 'events: ', events
+
+    return json.dumps(events)
 
 
 @app.route('/todo', methods=['GET', 'POST'])
@@ -131,6 +173,18 @@ def settings():
 @app.route('/typeahead', methods=['GET', 'POST'])
 @login_required
 def typeahead():
-    response = jsonify(options=['red', 'blue', 'green', 'yellow'])
+    # users = User.query.all()
+    # usernames = list()
+    #
+    # for user in users:
+    #     usernames.append()
+
+    response = jsonify(options=[user.nickname for user in User.query.all()])
     return response
 
+
+@app.route('/task-overview', methods=['GET', 'POST'])
+@login_required
+def task_overview():
+    print 'lol ', request.form
+    return render_template('views/task_overview.html', task=request.form)
