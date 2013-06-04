@@ -99,6 +99,10 @@
         <span class="add-on"><i class="icon-th"></i></span>
       </div>
 
+      {% if field.description %}
+        <p class="help-block">{{ field.description|safe }}</p>
+      {% endif %}
+
       {% if field.errors %}
         <span class="help-inline">{{ field.errors|join(' ')|safe }}</span>
       {% endif %}
