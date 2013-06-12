@@ -11,20 +11,19 @@ from models import User, Project, Task
 @app.route('/index')
 @login_required
 def index():
-    flash("test flash")
-    # user = g.user
-    projects = Project.query.all()
-    meta = db.metadata.tables.keys()
+    return render_template('index.html', title='megaproject')
 
+@app.route('/project/<id>')
+@login_required
+def project(id):
+    flash("test flash")
+
+    project = Project.query.filter_by(id=id).first()
+    meta = db.metadata.tables.keys()
     form = CreateTaskForm()
 
-    # print user
-    print projects
-    print meta
-    print form
-
-    return render_template('index.html', title='Index', projects=projects, meta=meta, form=form)
-    # return render_template('index.html', title='Index', user=user, projects=projects, meta=meta, form=form)
+    return render_template('project.html', title=project.name, project=project, meta=meta, form=form)
+    # return render_template('project.html', title='Index', user=user, projects=projects, meta=meta, form=form)
 
 
 @app.route('/projects')
@@ -191,7 +190,7 @@ def create_project():
         db.session.add(project)
         db.session.commit()
         flash('created project %s' % form.name.data)
-        return redirect(url_for('index'))
+        return redirect(url_for('projects'))
 
     return render_template('create_project.html', title='Create Project', user=user, form=form)
 
@@ -216,7 +215,7 @@ def create_task():
         flash('created task %s' % form.name.data)
         return redirect(url_for('index'))
 
-    return render_template('index.html', title='Index', user=user, form=form)
+    return render_template('project.html', title='Index', user=user, form=form)
 
 
 @app.route('/overview', methods=['GET', 'POST'])

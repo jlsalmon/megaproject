@@ -1,145 +1,22 @@
-{% extends "base/two_column_base.html" %}
+{% extends "base/base_with_nav_responsive.html" %}
 
-{% block css %}
-  <style type="text/css">
+{% block content %}
+  <body>
+  <div class="container">
 
-  </style>
-{% endblock %}
+    <!-- Main hero unit for a primary marketing message or call to action -->
+    <div class="hero-unit">
+      <h1>megaproject</h1>
+      <br>
+      <p>Need to manage a project? Well, here at megaproject, we are managing a project that makes it
+      easy for project managers to manage projects and other project management-based managerial activities.</p>
 
-{% block content_left %}
-
-  <div class="navbar tabbable">
-    <div class="navbar-inner navbar-justified">
-
-      <!-- .btn-navbar is used as the toggle for collapsed navbar content -->
-      <a class="btn btn-navbar" data-toggle="collapse" data-target="#justified-nav-collapse">
-        <span class="icon-bar"></span>
-        <span class="icon-bar"></span>
-        <span class="icon-bar"></span>
-      </a>
-
-      <div id="justified-nav-collapse" class="nav-collapse collapse">
-        <ul id="justified-nav" class="nav">
-          <li class="active"><a href="#overview" data-toggle="tab">Overview</a></li>
-          <li><a href="#todo" data-toggle="tab">To-Do</a></li>
-          <li><a href="#team" data-toggle="tab">Team Members</a></li>
-          <li><a href="#settings" data-toggle="tab">Settings</a></li>
-        </ul>
-      </div>
+      <p><a href="{{ url_for_security('register') }}" class="btn btn-primary btn-large">Register &raquo;</a></p>
     </div>
+
+    <hr>
+
+
   </div>
-  <!-- /.navbar -->
-
-  <div class="row-fluid">
-    <div class="span12">
-      <div class="tab-content">
-        <div class="tab-pane active" id="overview">Loading...</div>
-        <div class="tab-pane" id="todo">Loading...</div>
-        <div class="tab-pane" id="team">Loading...</div>
-        <div class="tab-pane" id="settings">Loading...</div>
-      </div>
-    </div>
-  </div>
-
-{% endblock %}
-
-{% block content_right %}
-  <div class="clearfix"></div>
-
-  <div class="thumbnail">
-    <div class="caption" id="task-overview">
-      <h3>Thumbnail label</h3>
-
-      <p>Cras justo odio, dapibus ac facilisis in, egestas eget quam. Donec id elit non mi porta gravida at eget metus.
-        Nullam id dolor id nibh ultricies vehicula ut id elit.</p>
-
-      <p><a href="#" rel="popover" data-original-title="A Title" class="btn btn-primary">Action</a> <a href="#"
-                                                                                                       class="btn">Action</a>
-      </p>
-
-      <div id="popover_content_wrapper" style="display: none">This is your div content</div>
-    </div>
-  </div>
-
-  <div class="thumbnail">
-    <div class="caption">
-      {% include "forms/create_task.html" %}
-    </div>
-  </div>
-
-{% endblock %}
-
-{% block scripts %}
-
-  <script type="text/javascript">
-
-    // Tabs
-    $(function () {
-      var baseURL = '/';
-      //load content for first tab and initialize
-      $('#overview').load(baseURL + 'overview', function () {
-        //initialize tabs
-        $('#justified-nav').tab();
-        initCalendar();
-      });
-      $('#justified-nav').bind('show', function (e) {
-        //use regex to get anchor(==selector)
-        var pattern = /#.+/gi
-        //get anchor
-        var contentID = e.target.toString().match(pattern)[0];
-
-        //load content for selected tab
-        $(contentID).load(baseURL + contentID.replace('#', ''), function () {
-          //reinitialize tabs
-          $('#justified-nav').tab();
-          initCalendar();
-        });
-      });
-    });
-
-    // Datepickers
-    $('.datepicker').datepicker();
-
-    $('.popover').popover({
-      html: true,
-      trigger: 'hover',
-      content: function () {
-        return $('#popover_content_wrapper').html();
-      }
-
-    });
-
-    // Task creation form
-    {#    $('#create-task').bind('submit', function (e) {#}
-    {#      e.preventDefault();#}
-    {##}
-    {#      $.post('/create-task', {#}
-    {#        $('#create-task').serialize()#}
-    {#      }).success(function (data) {#}
-    {#           alert('yay');#}
-    {#           console.log($(".datepicker"));#}
-    {#           console.log(data);#}
-    {#           $('#create-task').html(data).find(".datepicker").datepicker();#}
-    {##}
-    {#         }).error(function (data) {#}
-    {#           alert('aww');#}
-    {#           $('#create-task').html(data).find(".datepicker").datepicker();#}
-    {##}
-    {#         });#}
-    {##}
-    {#      $.ajax({#}
-    {#        type: "POST",#}
-    {#        url: "{{ url_for('create_task') }}",#}
-    {#        data: $('#create-task').serialize(),#}
-    {#        success: function (result) {#}
-    {#          console.log(result);#}
-    {#          $('#create-task').html(result).find(".datepicker").datepicker();#}
-    {#          #}
-    {#        }#}
-    {#      });#}
-    {##}
-    {#    });#}
-
-  </script>
-
+  </body>
 {% endblock %}
