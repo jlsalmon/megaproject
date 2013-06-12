@@ -1,0 +1,22 @@
+{% extends 'base/base_with_nav_responsive.html' %}
+
+{% block content %}
+  <div class='container'>
+
+    <div class="span2">
+      <a href="#">
+        <img src="{{ user.avatar(128) }}" class="img-polaroid avatar">
+      </a>
+    </div>
+    <div class="span8">
+      <h1>{{ user.first_name }} {{ user.last_name }}</h1>
+      <hr>
+
+        {% for post in posts %}
+          <p>
+            {{ post.author.nickname }} says: <b>{{ post.body }}</b>
+          </p>
+        {% endfor %}
+    </div>
+  </div>
+{% endblock %}

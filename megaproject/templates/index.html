@@ -1,58 +1,12 @@
-{% extends "base/base_with_nav_responsive.html" %}
+{% extends "base/two_column_base.html" %}
 
 {% block css %}
   <style type="text/css">
-    body {
-      padding-bottom: 60px;
-    }
 
-      /* Custom container */
-    .container {
-      margin: 0 auto;
-      max-width: 1000px;
-    }
-
-    .container > hr {
-      margin: 60px 0;
-    }
-
-      /* Customize the navbar links to be fill the entire space of the .navbar */
-    .navbar .navbar-inner {
-      padding: 0;
-    }
-
-    .navbar .navbar-justified .nav {
-      margin: 0;
-      display: table;
-      width: 100%;
-    }
-
-    .navbar .navbar-justified .nav li {
-      display: table-cell;
-      width: 1%;
-      float: none;
-    }
-
-    .navbar .navbar-justified .nav li a {
-      font-weight: bold;
-      text-align: center;
-      border-left: 1px solid rgba(255, 255, 255, .75);
-      border-right: 1px solid rgba(0, 0, 0, .1);
-    }
-
-    .navbar .navbar-justified .nav li:first-child a {
-      border-left: 0;
-      border-radius: 3px 0 0 3px;
-    }
-
-    .navbar .navbar-justified .nav li:last-child a {
-      border-right: 0;
-      border-radius: 0 3px 3px 0;
-    }
   </style>
 {% endblock %}
 
-{% block content %}
+{% block content_left %}
 
   <div class="navbar tabbable">
     <div class="navbar-inner navbar-justified">
@@ -89,13 +43,7 @@
 
 {% endblock %}
 
-{% block content_side %}
-  <div class="thumbnail">
-    <div class="caption">
-      {% include "forms/create_task.html" %}
-    </div>
-  </div>
-
+{% block content_right %}
   <div class="clearfix"></div>
 
   <div class="thumbnail">
@@ -112,6 +60,13 @@
       <div id="popover_content_wrapper" style="display: none">This is your div content</div>
     </div>
   </div>
+
+  <div class="thumbnail">
+    <div class="caption">
+      {% include "forms/create_task.html" %}
+    </div>
+  </div>
+
 {% endblock %}
 
 {% block scripts %}
@@ -125,6 +80,7 @@
       $('#overview').load(baseURL + 'overview', function () {
         //initialize tabs
         $('#justified-nav').tab();
+        initCalendar();
       });
       $('#justified-nav').bind('show', function (e) {
         //use regex to get anchor(==selector)
@@ -136,6 +92,7 @@
         $(contentID).load(baseURL + contentID.replace('#', ''), function () {
           //reinitialize tabs
           $('#justified-nav').tab();
+          initCalendar();
         });
       });
     });

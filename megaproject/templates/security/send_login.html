@@ -1,0 +1,16 @@
+{% extends "base/base_with_nav_responsive.html" %}
+{% from "utils/macros.html" import alert, field, input %}
+
+{% block content %}
+  <div class="container-fluid">
+    <h1>Login</h1>
+
+    <form action="{{ url_for_security('login') }}" method="POST" name="send_login_form">
+      {% include "views/flashes.html" %}
+
+      {{ send_login_form.hidden_tag() }}
+      {{ field(send_login_form.email) }}
+      {{ field(send_login_form.submit) }}
+    </form>
+  </div>
+{% endblock %}

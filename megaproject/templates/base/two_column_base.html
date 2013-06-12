@@ -1,0 +1,18 @@
+{% extends 'base/base_with_nav_responsive.html' %}
+
+{% block content %}
+  <div class="container-fluid">
+    <div class="row-fluid">
+
+      <div class="span9">
+        {% include "views/flashes.html" %}
+        {% block content_left %}{% endblock %}
+      </div>
+
+      <div class="span3">
+        {% block content_right %}{% endblock %}
+      </div>
+
+    </div>
+  </div>
+{% endblock %}

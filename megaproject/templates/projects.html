@@ -1,0 +1,40 @@
+{% extends 'base/two_column_base.html' %}
+
+{% block content_left %}
+
+
+  <div class="row-fluid">
+    <div class="span12">
+      <div class="span6">
+        <div class="logowrapper">
+          <img class="logoicon" src="http://placehold.it/300x300/bbb/&text=Avatar" alt="App Logo"/>
+        </div>
+      </div>
+      <div class="span6">
+        <div class="accordion" id="projects">
+
+          {% for project in projects %}
+
+            <div class="accordion-group">
+              <div class="accordion-heading">
+                <a class="accordion-toggle" data-toggle="collapse" data-parent="#projects" href="#{{ project.id }}">
+                  {{ project.name }}
+                </a>
+              </div>
+              <div id="{{ project.id }}" class="accordion-body collapse in">
+                <div class="accordion-inner">
+                  {{ project.info }}
+                </div>
+              </div>
+            </div>
+
+          {% endfor %}
+
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+
+{% endblock %}

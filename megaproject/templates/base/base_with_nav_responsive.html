@@ -1,106 +1,93 @@
 {% extends "base/base.html" %}
 
-{% block css_base %}
-  <style>
-    .navbar .square {
-      -webkit-border-radius: 0;
-      -moz-border-radius: 0;
-      border-radius: 0;
-    }
-  </style>
-  {% block css %}{% endblock %}
-{% endblock %}
+{% block header %}{% endblock %}
 
 {% block body %}
-  <div class="navbar navbar-inverse">
-    <div class="navbar-inner square">
-      <div class="container-fluid">
-        <a class="btn btn-navbar" data-toggle="collapse" data-target=".navbar-responsive-collapse">
-          <span class="icon-bar"></span>
-          <span class="icon-bar"></span>
-          <span class="icon-bar"></span>
-        </a>
-        <a class="brand" href="#">mega<span style="color: #f5f5f5">project</span></a>
+  <body>
+  <div id="wrap">
 
-        <div class="nav-collapse collapse navbar-responsive-collapse">
-          <ul class="nav">
-            <li class="dropdown">
-              <a href="#" class="dropdown-toggle" data-toggle="dropdown">Actions <b class="caret"></b></a>
-              <ul class="dropdown-menu">
-                <li><a href="/create-project">New Project</a></li>
-                <li><a href="#">Another action</a></li>
-                <li><a href="#">Something else here</a></li>
-                <li class="divider"></li>
-                <li class="nav-header">Nav header</li>
-                <li><a href="#">Separated link</a></li>
-                <li><a href="#">One more separated link</a></li>
-              </ul>
-            </li>
-          </ul>
-          <form class="navbar-search pull-left" action="">
-            <input type="text" class="typeahead search-query span2" id="typeahead" placeholder="Search">
-          </form>
-          <ul class="nav pull-right">
-            <li><a href="#">Link</a></li>
-            <li class="divider-vertical"></li>
-            {% if g.user.is_authenticated() %}
+    <div class="navbar navbar-inverse navbar-fixed-top">
+      <div class="navbar-inner square">
+        <div class="container-fluid">
+          <a class="btn btn-navbar" data-toggle="collapse" data-target=".navbar-responsive-collapse">
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </a>
+          <a class="brand" href="/">mega<span style="color: #f5f5f5">project</span></a>
+
+          <div class="nav-collapse collapse navbar-responsive-collapse">
+            <ul class="nav">
               <li class="dropdown">
-                <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-                  {{ user.nickname }}
-                  <b class="caret"></b>
-                </a>
+                <a href="#" class="dropdown-toggle" data-toggle="dropdown">Actions <b class="caret"></b></a>
                 <ul class="dropdown-menu">
-                  <li><a href="#">Profile</a></li>
+                  <li><a href="/create-project">New Project</a></li>
+                  <li><a href="#">Another action</a></li>
+                  <li><a href="#">Something else here</a></li>
                   <li class="divider"></li>
-                  <li class="nav-header">Actions</li>
-                  <li><a href="{{ url_for('logout') }}">Logout</a></li>
+                  <li class="nav-header">Nav header</li>
+                  <li><a href="#">Separated link</a></li>
+                  <li><a href="#">One more separated link</a></li>
                 </ul>
               </li>
-            {% endif %}
-          </ul>
+            </ul>
+            <form class="navbar-search pull-left" action="">
+              <input type="text" class="typeahead search-query span2" id="typeahead" placeholder="Search">
+            </form>
+            <ul class="nav pull-right">
+              <li><a href="#">Link</a></li>
+              <li class="divider-vertical"></li>
+              {% if current_user.is_authenticated() %}
+                <li class="dropdown">
+                  <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                    <i class="icon-user icon-white"></i>
+                    {{ current_user.first_name }} {{ current_user.last_name }}
+                    <b class="caret"></b>
+                  </a>
+                  <ul class="dropdown-menu">
+                    <li><a href="{{ url_for('user', id = current_user.id) }}">Profile</a></li>
+                    <li class="divider"></li>
+                    <li class="nav-header">Actions</li>
+                    <li><a href="{{ url_for('security.logout') }}">Logout</a></li>
+                    <li><a href="{{ url_for_security('change_password') }}">Change Password</a></li>
+                  </ul>
+                </li>
+              {% else %}
+                <li><a href="{{ url_for('security.login') }}">Login</a></li>
+                <li><a href="{{ url_for('security.register') }}">Register</a></li>
+              {% endif %}
+            </ul>
 
-
+          </div>
+          <!-- /.nav-collapse -->
         </div>
-        <!-- /.nav-collapse -->
       </div>
+      <!-- /navbar-inner -->
     </div>
-    <!-- /navbar-inner -->
+
+    {% block content %}{% endblock %}
+
+    <div id="push"></div>
   </div>
 
-  <div id="wrap">
+  <div id="footer">
     <div class="container-fluid">
-
-      <div class="row-fluid">
-
-        <div class="span9">
-          {% include "flashes.html" %}
-          {% block content %}{% endblock %}
-        </div>
-
-        <div class="span3">
-          {% block content_side %}{% endblock %}
-        </div>
-
-      </div>
-
-      <div id="push"></div>
+      <p class="muted credit">
+        &copy; megaproject
+      </p>
     </div>
-
   </div>
-
+  </body>
 {% endblock %}
 
-{% block footer_content %}
-  {% block scripts %}{% endblock %}
-
+{% block footer %}
   <script type="text/javascript">
+
+    // Initialize typeaheads
     $('.typeahead').typeahead({
       source: function (query, process) {
-        $.post(
-           '/typeahead',
-           {
-             data: query
-           },
+        $.post('/typeahead',
+           { data: query },
            function (data) {
              process(data.options);
            }
@@ -109,4 +96,5 @@
     });
   </script>
 
+  {% block scripts %}{% endblock %}
 {% endblock %}

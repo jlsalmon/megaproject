@@ -2,3 +2,4 @@
 .idea/
 *.py[co]
 tmp/
+config.py

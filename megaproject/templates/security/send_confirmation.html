@@ -1,0 +1,16 @@
+{% extends "base/base_with_nav_responsive.html" %}
+{% from "utils/macros.html" import alert, field, input %}
+
+{% block content %}
+  <div class="container-fluid">
+    <h1>Resend confirmation instructions</h1>
+
+    <form action="{{ url_for_security('send_confirmation') }}" method="POST" name="send_confirmation_form">
+      {% include "views/flashes.html" %}
+      {{ send_confirmation_form.hidden_tag() }}
+      {{ field(send_confirmation_form.email) }}
+      {{ field(send_confirmation_form.submit) }}
+    </form>
+
+  </div>
+{% endblock %}

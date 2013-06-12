@@ -1,14 +1,9 @@
 {% extends "base/base_with_nav_responsive.html" %}
-{% from "macros.html" import alert, field, input, date %}
-
-{% block css %}
-  <link rel="stylesheet" href="../static/css/datepicker.css" media="screen"/>
-{% endblock %}
+{% from "utils/macros.html" import alert, field, input, date %}
 
 {% block content %}
-
-  <div class="span8">
-    <form class="form-horizontal" action="" method="post" name="create-project">
+  <div class="container">
+    <form class="form-horizontal well" action="" method="post" name="create-project">
       <fieldset>
         <legend>Create Project</legend>
 
@@ -26,7 +21,6 @@
       </fieldset>
     </form>
   </div>
-
 {% endblock %}
 
 {% block scripts %}

@@ -1,54 +1,5 @@
 {% block content %}
-
-  <style type="text/css">
-    .show-grid {
-      margin-top: 5px;
-      margin-bottom: 5px;
-    }
-
-    .show-grid [class*="span"] {
-      background-color: #d9edf7;
-      -webkit-border-radius: 3px;
-      -moz-border-radius: 3px;
-      border-radius: 3px;
-      min-height: 40px;
-      line-height: 40px;
-    }
-
-    .show-grid [class*="span"]:hover {
-      background-color: #ddd;
-    }
-
-    .show-grid .show-grid {
-      margin-top: 0;
-      margin-bottom: 0;
-    }
-
-    .show-grid .show-grid [class*="span"] {
-      margin-top: 5px;
-    }
-
-    .show-grid [class*="span"] [class*="span"] {
-      background-color: #ccc;
-    }
-
-    .show-grid [class*="span"] [class*="span"] [class*="span"] {
-      background-color: #999;
-    }
-
-    .gantt-container {
-      border: 1px solid #eee;
-      padding: 5px;
-    }
-
-    .gantt-container blockquote {
-      margin: 0;
-      padding: 10px 10px 10px 15px
-    }
-  </style>
-
   <div class="gantt">
-
     <div class="gantt-container">
 
       <div class="row-fluid show-grid">
@@ -89,9 +40,7 @@
       </div>
       <!-- /row -->
 
-
     </div>
-
   </div>
 
 {% endblock %}

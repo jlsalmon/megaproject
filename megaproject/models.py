@@ -1,12 +1,11 @@
+from flask.ext.security import RoleMixin, UserMixin
+from twisted.python.hashlib import md5
 from megaproject import db, Base
-
-ROLE_USER = 0
-ROLE_ADMIN = 1
 
 
 class Project(db.Model):
     __tablename__ = 'project'
-    __table_args__ = {'extend_existing':True}
+    __table_args__ = {'extend_existing': True}
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(256), index=True)
     start_date = db.Column(db.Date)
@@ -40,13 +39,36 @@ association_table = db.Table('UserTask', Base.metadata,
                              db.Column('task_id', db.Integer, db.ForeignKey('task.id'))
 )
 
+# Define models
+roles_users = db.Table('roles_users',
+                       db.Column('user_id', db.Integer(), db.ForeignKey('user.id')),
+                       db.Column('role_id', db.Integer(), db.ForeignKey('role.id')))
 
-class User(db.Model):
+
+class Role(db.Model, RoleMixin):
+    id = db.Column(db.Integer(), primary_key=True)
+    name = db.Column(db.String(80), unique=True)
+    description = db.Column(db.String(255))
+
+
+class User(db.Model, UserMixin):
     __tablename__ = 'user'
     id = db.Column(db.Integer, primary_key=True)
     nickname = db.Column(db.String(64), index=True, unique=True)
+    first_name = db.Column(db.String(64))
+    last_name = db.Column(db.String(64))
     email = db.Column(db.String(120), index=True, unique=True)
-    role = db.Column(db.SmallInteger, default=ROLE_USER)
+    password = db.Column(db.String(255))
+    active = db.Column(db.Boolean())
+    confirmed_at = db.Column(db.DateTime())
+    roles = db.relationship('Role', secondary=roles_users,
+                            backref=db.backref('users', lazy='dynamic'))
+
+    def avatar(self, size):
+        return 'http://www.gravatar.com/avatar/' \
+               + md5(self.email).hexdigest() \
+               + '?d=identicon&s=' + str(size)
+
     # children = db.relationship("Task",
     #                            secondary=association_table,
     #                            backref="users")
@@ -76,4 +98,4 @@ class User(db.Model):
         return new_nickname
 
     def __repr__(self):
-        return '<User %r>' % self.nickname
+        return '<User %r id=%d email=%s>' % (self.nickname, self.id, self.email)
