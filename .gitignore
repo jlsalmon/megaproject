@@ -3,3 +3,5 @@
 *.py[co]
 tmp/
 config.py
+build
+app.db
