@@ -10,7 +10,7 @@ body {
     height: auto !important;
     height: 100%;
     /* Negative indent footer by it's height */
-    margin: 0 auto -60px;
+    margin: 0 auto -100px;
 }
 
 /* Set the fixed height of the footer here */
@@ -24,7 +24,7 @@ body {
     margin-top: 40px;
 }
 
-/* Lastly, apply responsive CSS fixes as necessary */
+/* apply responsive CSS fixes as necessary */
 @media (max-width: 767px) {
     #footer {
         margin-left: -20px;
@@ -32,6 +32,10 @@ body {
         padding-left: 20px;
         padding-right: 20px;
     }
+}
+
+#calendar {
+    margin-bottom: 20px;
 }
 
 /* Custom page CSS
@@ -107,10 +111,6 @@ body {
 }
 
 /* Project view page styles */
-
-body {
-    padding-bottom: 60px;
-}
 
 /* Customize the navbar links to be fill the entire space of the .navbar */
 .navbar .navbar-inner {
