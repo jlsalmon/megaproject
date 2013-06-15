@@ -12,11 +12,11 @@
       <h1>{{ user.first_name }} {{ user.last_name }}</h1>
       <hr>
 
-        {% for post in posts %}
-          <p>
-            {{ post.author.nickname }} says: <b>{{ post.body }}</b>
-          </p>
-        {% endfor %}
+      <a href="{{ url_for_security('change_password') }}">
+        <i class="icon-edit icon-white">  </i>
+        Change Password
+      </a>
+
     </div>
   </div>
 {% endblock %}

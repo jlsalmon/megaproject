@@ -4,7 +4,7 @@
 
 
   <div class="container">
-    <table class="table table-hover table-bordered table-striped">
+    <table class="table table-hover table-bordered table-striped" data-provides="rowlink">
       <thead>
       <tr>
         <th>#</th>
@@ -16,10 +16,10 @@
       <tbody>
       {% for project in projects %}
         <tr>
-          <td>{{ project.id }}</td>
+          <td><a class="rowlink" href="project/{{ project.id }}">{{ project.id }}</a></td>
           <td>{{ project.name }}</td>
           <td>{{ project.info }}</td>
-          <td>{{ project.team }}</td>
+          <td class="nolink">{{ project.team }}</td>
         </tr>
       {% endfor %}
       </tbody>

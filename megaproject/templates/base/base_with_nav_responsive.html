@@ -1,6 +1,13 @@
 {% extends "base/base.html" %}
 
-{% block header %}{% endblock %}
+{% block head %}
+  <style type="text/css">
+    a.nohover {
+      color: white !important;
+    }
+
+  </style>
+{% endblock %}
 
 {% block body %}
   <body>
@@ -16,28 +23,16 @@
           </a>
           <a class="brand" href="/">mega<span style="color: #f5f5f5">project</span></a>
 
-          <div class="nav-collapse collapse navbar-responsive-collapse">
-            <ul class="nav">
-              <li class="dropdown">
-                <a href="#" class="dropdown-toggle" data-toggle="dropdown">Actions <b class="caret"></b></a>
-                <ul class="dropdown-menu">
-                  <li><a href="/create-project">New Project</a></li>
-                  <li><a href="#">Another action</a></li>
-                  <li><a href="#">Something else here</a></li>
-                  <li class="divider"></li>
-                  <li class="nav-header">Nav header</li>
-                  <li><a href="#">Separated link</a></li>
-                  <li><a href="#">One more separated link</a></li>
-                </ul>
-              </li>
-            </ul>
-            <form class="navbar-search pull-left" action="">
-              <input type="text" class="typeahead search-query span2" id="typeahead" placeholder="Search">
-            </form>
-            <ul class="nav pull-right">
-              <li><a href="#">Link</a></li>
-              <li class="divider-vertical"></li>
-              {% if current_user.is_authenticated() %}
+          {% if current_user.is_authenticated() %}
+            <div class="nav-collapse collapse navbar-responsive-collapse">
+              <ul class="nav">
+                <li class="dropdown">
+                  <a class="nohover" href="/projects"><i class="icon-bar-chart icon-white"></i> Projects</a>
+                </li>
+              </ul>
+              <ul class="nav pull-right">
+                <li class="divider-vertical"></li>
+
                 <li class="dropdown">
                   <a href="#" class="dropdown-toggle" data-toggle="dropdown">
                     <i class="icon-user icon-white"></i>
@@ -45,20 +40,41 @@
                     <b class="caret"></b>
                   </a>
                   <ul class="dropdown-menu">
-                    <li><a href="{{ url_for('user', id = current_user.id) }}">Profile</a></li>
+                    <li><a href="{{ url_for('user', id = current_user.id) }}"><i class="icon-picture icon-white"></i>
+                      Profile</a></li>
                     <li class="divider"></li>
-                    <li class="nav-header">Actions</li>
-                    <li><a href="{{ url_for('security.logout') }}">Logout</a></li>
-                    <li><a href="{{ url_for_security('change_password') }}">Change Password</a></li>
+                    <li><a href="{{ url_for('security.logout') }}"><i class="icon-signout icon-white"></i> Logout</a>
+                    </li>
                   </ul>
                 </li>
-              {% else %}
-                <li><a href="{{ url_for('security.login') }}">Login</a></li>
-                <li><a href="{{ url_for('security.register') }}">Register</a></li>
-              {% endif %}
-            </ul>
+              </ul>
+              <form class="navbar-search pull-right" action="">
+                <i class="icon-search icon-white"></i>
+                <input type="text" class="typeahead search-query span2" id="typeahead" placeholder=" Search">
+              </form>
+            </div>
+          {% else %}
 
-          </div>
+            <div class="nav-collapse collapse navbar-responsive-collapse">
+              <ul class="nav pull-right">
+                <li class="divider-vertical"></li>
+                <li>
+                  <a href="{{ url_for('security.login') }}">
+                    <i class="icon-signin icon-white"></i>
+                    Login
+                  </a>
+                </li>
+                <li>
+                  <a href="{{ url_for('security.register') }}">
+                    <i class="icon-edit icon-white"></i>
+                    Register
+                  </a>
+                </li>
+              </ul>
+            </div>
+
+          {% endif %}
+
           <!-- /.nav-collapse -->
         </div>
       </div>
