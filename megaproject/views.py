@@ -9,7 +9,6 @@ from models import User, Project, Task
 
 @app.route('/')
 @app.route('/index')
-@login_required
 def index():
     return render_template('index.html', title='megaproject')
 
