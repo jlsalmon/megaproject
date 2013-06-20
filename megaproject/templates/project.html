@@ -8,6 +8,14 @@
 
 {% block content_left %}
 
+  <header>
+    <p class="lead">
+      <i class="icon-bar-chart muted"></i>
+      {{ project.name }}
+    </p>
+    <hr>
+  </header>
+
   <div class="navbar tabbable">
     <div class="navbar-inner navbar-justified">
 
@@ -20,10 +28,10 @@
 
       <div id="justified-nav-collapse" class="nav-collapse collapse">
         <ul id="justified-nav" class="nav">
-          <li class="active"><a href="#overview" data-toggle="tab">Overview</a></li>
-          <li><a href="#todo" data-toggle="tab">To-Do</a></li>
-          <li><a href="#team" data-toggle="tab">Team Members</a></li>
-          <li><a href="#settings" data-toggle="tab">Settings</a></li>
+          <li class="active"><a href="#overview" data-toggle="tab"><i class="icon-home"></i> Overview</a></li>
+          <li><a href="#todo" data-toggle="tab"><i class="icon-check"></i> To-Do</a></li>
+          <li><a href="#team" data-toggle="tab"><i class="icon-group"></i> Team Members</a></li>
+          <li><a href="#settings" data-toggle="tab"><i class="icon-cogs"></i> Settings</a></li>
         </ul>
       </div>
     </div>

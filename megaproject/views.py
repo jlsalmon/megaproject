@@ -21,6 +21,8 @@ def project(id):
     meta = db.metadata.tables.keys()
     form = CreateTaskForm()
 
+    g.project = project
+
     return render_template('project.html', title=project.name, project=project, meta=meta, form=form)
     # return render_template('project.html', title='Index', user=user, projects=projects, meta=meta, form=form)
 
@@ -52,14 +54,6 @@ def user(id):
 @lm.user_loader
 def load_user(id):
     return User.query.get(int(id))
-
-
-@app.before_first_request
-def create_user():
-    """Create a user to test with"""
-    db.create_all()
-    user_datastore.create_user(email='matt@nobien.net', password='password')
-    db.session.commit()
 
 
 @app.before_request
@@ -208,11 +202,12 @@ def create_task():
         task = Task(name=form.name.data,
                     start_date=form.start_date.data,
                     end_date=form.end_date.data,
-                    info=form.info.data)
+                    info=form.info.data,
+                    project_id=g.project.id)
         db.session.add(task)
         db.session.commit()
         flash('created task %s' % form.name.data)
-        return redirect(url_for('index'))
+        return redirect(url_for('project', id=g.project.id))
 
     return render_template('project.html', title='Index', user=user, form=form)
 
@@ -227,12 +222,8 @@ def overview():
 @login_required
 def events():
     print '[!] /events'
-    event1 = {'title': 'Task 1', 'start': '2013-05-05 12:30:00',
-              'end': '%s' % datetime.now().strftime('%Y-%m-%d %H:%M:%S'), 'color': '#ddd'}
-    event2 = {'title': 'Task 2', 'start': '2013-05-06 12:30:00',
-              'end': '%s' % datetime.now().strftime('%Y-%m-%d %H:%M:%S'), 'color': '#eee'}
 
-    events = [event1, event2]
+    events = list()
 
     for event in Task.query.all():
         ev = event.__dict__
